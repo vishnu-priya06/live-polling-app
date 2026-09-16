@@ -1,0 +1,18 @@
+# Node
+node_modules/
+dist/
+
+# Go
+bin/
+
+# Environment
+.env
+.env.*
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
