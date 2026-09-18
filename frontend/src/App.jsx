@@ -1,121 +1,108 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
+import { NavLink, Route, Routes, useNavigate } from 'react-router-dom'
+import { useAuth } from './auth/AuthContext'
+import ProtectedRoute from './auth/ProtectedRoute'
+import HomePage from './pages/HomePage'
+import PollsPage from './pages/PollsPage'
+import CreatePollPage from './pages/CreatePollPage'
+import PollDetailPage from './pages/PollDetailPage'
+import ResultsPage from './pages/ResultsPage'
+import LoginPage from './pages/LoginPage'
+import SignupPage from './pages/SignupPage'
+import MyPollsPage from './pages/MyPollsPage'
+import AnalyticsPage from './pages/AnalyticsPage'
+import DashboardPage from './pages/DashboardPage'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const navigate = useNavigate()
+  const { isAuthenticated, user, logout } = useAuth()
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login', { replace: true })
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="app-shell">
+      <header className="topbar">
+        <div className="brand-block">
+          <div className="brand-mark">LP</div>
+          <div>
+            <span className="brand-name">Live Polling</span>
+            <small>Realtime community feedback</small>
+          </div>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
 
-      <div className="ticks"></div>
+        <nav className="main-nav" aria-label="Main navigation">
+          {isAuthenticated ? (
+            <>
+              <NavLink to="/dashboard">Dashboard</NavLink>
+              <NavLink to="/polls/mine">My Polls</NavLink>
+              <NavLink to="/polls/new">Create Poll</NavLink>
+              <NavLink to="/analytics">Analytics</NavLink>
+              <div className="nav-user-block" title={user?.email || 'Authenticated user'}>
+                <span className="nav-user-avatar">{(user?.name || user?.email || 'M').charAt(0).toUpperCase()}</span>
+                <span className="nav-user-name">{user?.name || user?.email || 'Member'}</span>
+              </div>
+              <button type="button" className="nav-logout" onClick={handleLogout}>
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <NavLink to="/">Home</NavLink>
+              <NavLink to="/polls">Polls</NavLink>
+              <NavLink to="/login">Login</NavLink>
+              <NavLink to="/signup">Sign up</NavLink>
+            </>
+          )}
+        </nav>
+      </header>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+      <main className="main-content">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/polls" element={<PollsPage />} />
+          <Route
+            path="/dashboard"
+            element={(
+              <ProtectedRoute>
+                <DashboardPage />
+              </ProtectedRoute>
+            )}
+          />
+          <Route
+            path="/polls/new"
+            element={(
+              <ProtectedRoute>
+                <CreatePollPage />
+              </ProtectedRoute>
+            )}
+          />
+          <Route
+            path="/polls/mine"
+            element={(
+              <ProtectedRoute>
+                <MyPollsPage />
+              </ProtectedRoute>
+            )}
+          />
+          <Route
+            path="/analytics"
+            element={(
+              <ProtectedRoute>
+                <AnalyticsPage />
+              </ProtectedRoute>
+            )}
+          />
+          <Route path="/polls/:id" element={<PollDetailPage />} />
+          <Route path="/polls/:id/results" element={<ResultsPage />} />
+          <Route path="*" element={<HomePage />} />
+        </Routes>
+      </main>
+    </div>
   )
 }
 
