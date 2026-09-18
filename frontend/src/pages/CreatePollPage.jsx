@@ -139,7 +139,7 @@ export default function CreatePollPage() {
   }
 
   return (
-    <div className="page-shell narrow">
+    <div className="page-shell narrow creation-page">
       <section className="card-surface creation-hero">
         <div>
           <span className="eyebrow">Create a poll</span>
@@ -219,6 +219,25 @@ export default function CreatePollPage() {
 
         {errors.options && <p className="field-error">{errors.options}</p>}
         {submitError && <p className="form-error" role="alert">{submitError}</p>}
+
+        <aside className="creation-preview" aria-label="Poll preview">
+          <div className="creation-preview-heading">
+            <div>
+              <span className="form-kicker">Live preview</span>
+              <h3>How your poll will appear</h3>
+            </div>
+            <span className="status-pill success"><span className="live-dot" /> Open</span>
+          </div>
+          <h4>{question.trim() || 'Your question will appear here'}</h4>
+          <div className="creation-preview-options">
+            {options.map((option, index) => (
+              <div className="creation-preview-option" key={option.id}>
+                <span className="option-badge" data-tone={index % 2 ? 'violet' : 'indigo'}>{String.fromCharCode(65 + index)}</span>
+                <span>{option.value.trim() || `Option ${index + 1}`}</span>
+              </div>
+            ))}
+          </div>
+        </aside>
 
         <div className="creation-footer">
           <p className="creation-note">Your poll will open live as soon as it is created.</p>

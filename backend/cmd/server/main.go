@@ -25,6 +25,10 @@ func resolvePort() string {
 func main() {
 	config.LoadEnv()
 
+	if _, err := config.JWTSecret(); err != nil {
+		log.Fatal("JWT configuration error: ", err)
+	}
+
 	// Connect to MongoDB
 	config.ConnectDB()
 

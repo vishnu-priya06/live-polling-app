@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 	"strings"
@@ -21,6 +22,19 @@ func LoadEnv() {
 			return
 		}
 	}
+}
+
+func JWTSecret() (string, error) {
+	secret := strings.TrimSpace(os.Getenv("JWT_SECRET"))
+	if secret == "" {
+		return "", errors.New("JWT_SECRET is not configured")
+	}
+
+	if len(secret) < 32 {
+		return "", errors.New("JWT_SECRET must be at least 32 characters long")
+	}
+
+	return secret, nil
 }
 
 func IsAllowedOrigin(origin string) bool {

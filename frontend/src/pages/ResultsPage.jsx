@@ -21,7 +21,7 @@ export default function ResultsPage() {
   }, [id])
 
   return (
-    <div className="page-shell narrow">
+    <div className="page-shell narrow results-page">
       <section className="card-surface panel-header">
         <div>
           <span className="eyebrow">Results</span>
@@ -32,7 +32,7 @@ export default function ResultsPage() {
         </Link>
       </section>
 
-      <section className="card-surface form-panel">
+      <section className="card-surface form-panel" aria-live="polite">
         {error ? (
           <p className="form-error">{error}</p>
         ) : result ? (
@@ -65,7 +65,7 @@ export default function ResultsPage() {
             </div>
           </>
         ) : (
-          <p>Loading results…</p>
+          <div className="results-loading"><span className="loading-orb" aria-hidden="true" /><p>Loading results…</p></div>
         )}
       </section>
     </div>

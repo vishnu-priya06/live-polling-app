@@ -66,7 +66,7 @@ export default function MyPollsPage() {
 
   if (isLoading) {
     return (
-      <div className="page-shell narrow">
+      <div className="page-shell narrow management-page">
         <section className="card-surface dashboard-loading" aria-live="polite">
           <span className="eyebrow">My polls</span>
           <h1>Loading your polls</h1>
@@ -79,7 +79,7 @@ export default function MyPollsPage() {
 
   if (error) {
     return (
-      <div className="page-shell narrow">
+      <div className="page-shell narrow management-page">
         <section className="card-surface dashboard-error" role="alert">
           <span className="eyebrow">My polls</span>
           <h1>We could not load your polls.</h1>
@@ -91,7 +91,7 @@ export default function MyPollsPage() {
   }
 
   return (
-    <div className="page-shell dashboard-page">
+    <div className="page-shell dashboard-page management-page">
       <section className="dashboard-list" aria-label="Polls created by you">
         <div className="dashboard-list-heading">
           <div>

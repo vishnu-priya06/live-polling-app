@@ -1,13 +1,13 @@
 package utils
 
 import (
-	"errors"
-	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
+
+	"live-polling-app/backend/config"
 )
 
 func HashPassword(password string) (string, error) {
@@ -31,9 +31,9 @@ func ErrorResponse(c *gin.Context, statusCode int, message string) {
 }
 
 func GenerateToken(userID string) (string, error) {
-	secret := os.Getenv("JWT_SECRET")
-	if secret == "" {
-		return "", errors.New("JWT_SECRET is not configured")
+	secret, err := config.JWTSecret()
+	if err != nil {
+		return "", err
 	}
 
 	claims := jwt.MapClaims{
@@ -46,9 +46,9 @@ func GenerateToken(userID string) (string, error) {
 }
 
 func ValidateToken(tokenString string) (string, error) {
-	secret := os.Getenv("JWT_SECRET")
-	if secret == "" {
-		return "", errors.New("JWT_SECRET is not configured")
+	secret, err := config.JWTSecret()
+	if err != nil {
+		return "", err
 	}
 
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {

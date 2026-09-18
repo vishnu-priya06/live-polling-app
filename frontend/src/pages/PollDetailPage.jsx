@@ -259,7 +259,7 @@ export default function PollDetailPage() {
 
   if (!poll) {
     return (
-      <div className="page-shell narrow">
+      <div className="page-shell narrow poll-detail-page">
         <div className="card-surface loading-panel">
           {error ? <p className="form-error">{error}</p> : <p>Loading poll…</p>}
         </div>
@@ -268,7 +268,7 @@ export default function PollDetailPage() {
   }
 
   return (
-    <div className="page-shell narrow">
+    <div className="page-shell narrow poll-detail-page">
       <section className="card-surface panel-header">
         <div>
           <span className="eyebrow">Poll details</span>
@@ -290,6 +290,10 @@ export default function PollDetailPage() {
       </section>
 
       <section className="card-surface form-panel">
+      <div className="poll-detail-meta" aria-label="Poll summary">
+        <span><strong>{poll.options?.length || 0}</strong> options</span>
+        <span><strong>{totalVotes}</strong> total votes</span>
+      </div>
         {!poll.isActive && (
           <div className="closed-poll-banner" role="status">
             <strong>Poll Closed</strong>

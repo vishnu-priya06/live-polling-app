@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -41,6 +42,7 @@ func Signup(c *gin.Context) {
 
 	token, err := utils.GenerateToken(user.ID.Hex())
 	if err != nil {
+		log.Printf("signup token generation failed: %v", err)
 		utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to generate token")
 		return
 	}
@@ -71,6 +73,7 @@ func Login(c *gin.Context) {
 
 	token, err := utils.GenerateToken(user.ID.Hex())
 	if err != nil {
+		log.Printf("login token generation failed: %v", err)
 		utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to generate token")
 		return
 	}

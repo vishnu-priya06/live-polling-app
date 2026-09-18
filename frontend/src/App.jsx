@@ -28,7 +28,7 @@ function App() {
         <div className="brand-block">
           <div className="brand-mark">LP</div>
           <div>
-            <span className="brand-name">Live Polling</span>
+            <span className="brand-name">Live Pulse</span>
             <small>Realtime community feedback</small>
           </div>
         </div>

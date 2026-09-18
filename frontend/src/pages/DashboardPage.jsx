@@ -13,6 +13,7 @@ function getGreeting(userName) {
 export default function DashboardPage() {
 	const { user } = useAuth()
 	const { polls, analytics, isLoading, error } = useCreatorPollAnalytics()
+	const closedPolls = analytics.totalPolls - analytics.activePolls
 
 	if (isLoading) {
 		return <div className="page-shell narrow"><section className="card-surface dashboard-loading" aria-live="polite"><span className="eyebrow">Creator dashboard</span><h1>Loading your workspace</h1><p>Gathering your polls, responses, and activity.</p><div className="loading-bar" aria-hidden="true" /></section></div>
@@ -29,14 +30,16 @@ export default function DashboardPage() {
 					<span className="eyebrow">Creator dashboard</span>
 					<h1>{getGreeting(user?.name || user?.email || 'Creator')}</h1>
 					<p>Create, manage, and understand your live polls from one place.</p>
+					<span className="dashboard-live-mark"><span className="live-dot" /> Live workspace</span>
 				</div>
-				<Link to="/polls/new" className="primary-btn">Create Poll</Link>
+				<Link to="/polls/new" className="primary-btn"><span aria-hidden="true">+</span> Create Poll</Link>
 			</section>
 
 			<section className="stat-grid" aria-label="Poll summary">
-				<article className="stat-card card-surface"><div className="stat-icon indigo">◔</div><div className="stat-value">{analytics.totalPolls}</div><div className="stat-label">Total Polls</div><div className="stat-meta">Created by you</div></article>
-				<article className="stat-card card-surface"><div className="stat-icon violet">▣</div><div className="stat-value">{analytics.totalVotes}</div><div className="stat-label">Total Votes</div><div className="stat-meta">Collected across your polls</div></article>
-				<article className="stat-card card-surface"><div className="stat-icon emerald">◉</div><div className="stat-value">{analytics.activePolls}</div><div className="stat-label">Active Polls</div><div className="stat-meta">Currently open for votes</div></article>
+				<article className="stat-card card-surface"><div className="stat-icon indigo" aria-hidden="true">◔</div><div className="stat-value">{analytics.totalPolls}</div><div className="stat-label">Total Polls</div><div className="stat-meta">Created by you</div></article>
+				<article className="stat-card card-surface"><div className="stat-icon emerald" aria-hidden="true">◉</div><div className="stat-value">{analytics.activePolls}</div><div className="stat-label">Active Polls</div><div className="stat-meta">Currently open for votes</div></article>
+				<article className="stat-card card-surface"><div className="stat-icon amber" aria-hidden="true">◌</div><div className="stat-value">{closedPolls}</div><div className="stat-label">Closed Polls</div><div className="stat-meta">No longer accepting votes</div></article>
+				<article className="stat-card card-surface"><div className="stat-icon violet" aria-hidden="true">▣</div><div className="stat-value">{analytics.totalVotes}</div><div className="stat-label">Total Votes</div><div className="stat-meta">Collected across your polls</div></article>
 			</section>
 
 			{polls.length === 0 ? (
